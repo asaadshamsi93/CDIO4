@@ -1,5 +1,9 @@
 public class Player {
 
+    private String Name;
+    private int Balance;
+    private int PlayerNumber;
+
     public Player(String name, int playerNumber, int balance) {
         Name = name;
         Balance = balance;
@@ -30,9 +34,6 @@ public class Player {
         PlayerNumber = playerNumber;
     }
 
-    private String Name;
-    private int Balance;
-    private int PlayerNumber;
 
 
 

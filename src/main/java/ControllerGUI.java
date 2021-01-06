@@ -1,4 +1,5 @@
 import gui_fields.GUI_Car;
+import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
@@ -6,16 +7,31 @@ import java.awt.*;
 
 public class ControllerGUI {
 
-   public GUI gui;
+
    public Player[] player;
    public GUI_Player[] gui_player;
+   public GUI gui;
+   public Dice dice = new Dice();
+   private boolean win=false;
 
     ControllerGUI(){
          gui = new GUI();
         PlayerStart();
 
+        while (!win){
 
+            Start();
+        }
     }
+
+    public void Start(){
+
+        gui.showMessage(" Do you  want to rolle the dice");
+        gui.setDice(dice.RolleDice(),dice.RolleDice());
+    }
+
+
+
 
     public void PlayerSetup(Player player, int playeramout){
 
@@ -23,8 +39,11 @@ public class ControllerGUI {
            gui_player = new GUI_Player[playeramout];
        }
 
+
+
        gui_player[player.getPlayerNumber()] = new GUI_Player(player.getName(),player.getBalance(), carType(player.getPlayerNumber()));
         gui.addPlayer(gui_player[player.getPlayerNumber()]);
+       gui.getFields()[0].setCar(gui_player[player.getPlayerNumber()],true);
     }
 
     public GUI_Car carType(int PlayerNumber){
