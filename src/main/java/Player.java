@@ -3,7 +3,7 @@ public class Player {
     private String Name;
     private int Balance;
     private int PlayerNumber;
-    public int PlayerPosition=0;
+    public int PlayerPosition;
     public boolean PlayerTurn=false;
 
     public int getPlayerNewPo() {

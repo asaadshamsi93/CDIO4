@@ -33,7 +33,7 @@ public class ControllerGame {
 
 
 
-
+    int sum;
     public void Roll(){
 
         player= NextPlayer();
@@ -42,7 +42,7 @@ public class ControllerGame {
         controllerGUI.gui.showMessage(" Do you  want to rolle the dice?");
         int Rolle1= dice.RolleDice();
         int Rolle2 = dice.RolleDice();
-        int sum=Rolle1+Rolle2;
+        sum=Rolle1+Rolle2;
         player.setPlayerNewPo(sum);
 
         controllerGUI.gui.setDice(Rolle1,Rolle2);
@@ -50,8 +50,26 @@ public class ControllerGame {
 
     public void MoveCar(){
 
-        controllerGUI.gui.getFields()[player.getPlayerPosition()].setCar(controllerGUI.gui_player[player.getPlayerNumber()],false);
-        controllerGUI.gui.getFields()[player.getPlayerNewPo()].setCar(controllerGUI.gui_player[player.getPlayerNumber()],true);
+        int CurrentPosition= player.getPlayerPosition();
+        int PlayerNewPosition =  (player.getPlayerPosition() + player.getPlayerNewPo()) % controllerGUI.gui.getFields().length;
+
+        try {
+                controllerGUI.gui.getFields()[CurrentPosition].setCar(controllerGUI.gui_player[player.getPlayerNumber()],false);
+                controllerGUI.gui.getFields()[PlayerNewPosition].setCar(controllerGUI.gui_player[player.getPlayerNumber()],true);
+        }catch (IndexOutOfBoundsException e){
+                e.printStackTrace();
+                System.out.println(" IndexOutOfBoundsException");
+        }
+
+        player.setPlayerPosition(PlayerNewPosition);
+
+
+
+
+
+
+
+
 
     }
 
