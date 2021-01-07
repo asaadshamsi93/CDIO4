@@ -3,6 +3,40 @@ public class Player {
     private String Name;
     private int Balance;
     private int PlayerNumber;
+    public int PlayerPosition=0;
+    public boolean PlayerTurn=false;
+
+    public int getPlayerNewPo() {
+        return PlayerNewPo;
+    }
+
+    public void setPlayerNewPo(int playerNewPo) {
+        PlayerNewPo = playerNewPo;
+    }
+
+    public int PlayerNewPo;
+
+    public boolean isPlayerTurn() {
+        return PlayerTurn;
+    }
+
+    public void setPlayerTurn(boolean playerTurn) {
+        PlayerTurn = playerTurn;
+    }
+
+
+
+
+    public int getPlayerPosition() {
+        return PlayerPosition;
+    }
+
+
+    public void setPlayerPosition(int playerPosition) {
+        PlayerPosition = playerPosition;
+    }
+
+
 
     public Player(String name, int playerNumber, int balance) {
         Name = name;

@@ -11,25 +11,42 @@ public class ControllerGUI {
    public Player[] player;
    public GUI_Player[] gui_player;
    public GUI gui;
-   public Dice dice = new Dice();
-   private boolean win=false;
+
+
+
 
     ControllerGUI(){
          gui = new GUI();
         PlayerStart();
+    }
 
-        while (!win){
 
-            Start();
+
+
+
+    public void PlayerStart(){
+        int number = Integer.parseInt(RequestPlayerAmount());
+        System.out.println(number);
+
+        player= new Player[number];
+
+
+        for (int PlayerAmount = 0; PlayerAmount < number ; PlayerAmount++){
+
+
+            String PlayerName = gui.getUserString("Enter your name");
+            if (PlayerName.equals("")){
+
+                PlayerName = gui.getUserString("Player ") + (PlayerAmount+1);
+
+            }
+            player[PlayerAmount] = new Player(PlayerName,PlayerAmount,30000);
+            PlayerSetup(player[PlayerAmount],number);
+
+            System.out.println(PlayerAmount);
         }
+
     }
-
-    public void Start(){
-
-        gui.showMessage(" Do you  want to rolle the dice");
-        gui.setDice(dice.RolleDice(),dice.RolleDice());
-    }
-
 
 
 
@@ -45,6 +62,7 @@ public class ControllerGUI {
         gui.addPlayer(gui_player[player.getPlayerNumber()]);
        gui.getFields()[0].setCar(gui_player[player.getPlayerNumber()],true);
     }
+
 
     public GUI_Car carType(int PlayerNumber){
 
@@ -84,27 +102,6 @@ public class ControllerGUI {
     }
 
 
-    public void PlayerStart(){
-       int number = Integer.parseInt(RequestPlayerAmount());
-        System.out.println(number);
-
-       player= new Player[number];
-
-
-       for (int PlayerAmount = 0; PlayerAmount < number ; PlayerAmount++){
-
-
-           String PlayerName = gui.getUserString("Enter your name");
-           if (PlayerName.equals("")){
-               gui.showMessage("Player"+ " " + PlayerAmount+1);
-           }
-           player[PlayerAmount] = new Player(PlayerName,PlayerAmount,30000);
-           PlayerSetup(player[PlayerAmount],number);
-
-           System.out.println(PlayerAmount);
-       }
-
-    }
 
 
 
