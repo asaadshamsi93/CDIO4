@@ -106,9 +106,10 @@ public class ControllerGUI {
 
 
 
+
     public String RequestPlayerAmount(){
 
-        return gui.getUserSelection("Hvor manage spiller skal der være","3","4","5","6");
+        return gui.getUserSelection("Hvor manage spiller skal der være","2","3","4","5","6");
     }
 
 
