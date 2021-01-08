@@ -15,8 +15,10 @@ public class ControllerGUI {
 
 
 
+
+
     ControllerGUI(){
-         gui = new GUI();
+         gui = new GUI(new  GUIfields().CreatGUI());
         PlayerStart();
     }
 
@@ -24,36 +26,33 @@ public class ControllerGUI {
 
 
 
+
+
     public void PlayerStart(){
         int number = Integer.parseInt(RequestPlayerAmount());
-        System.out.println(number);
 
         player= new Player[number];
 
 
-        for (int PlayerAmount = 0; PlayerAmount < number ; PlayerAmount++){
-
-
+        for (int i = 0; i < number ; i++){
             String PlayerName = gui.getUserString("Enter your name");
             if (PlayerName.equals("")){
 
-                PlayerName = gui.getUserString("Player ") + (PlayerAmount+1);
+                PlayerName = ("Spiller ")  + (i+1);
 
             }
-            player[PlayerAmount] = new Player(PlayerName,PlayerAmount,30000);
-            PlayerSetup(player[PlayerAmount],number);
-
-            System.out.println(PlayerAmount);
+            player[i] = new Player(PlayerName,i,30000);
+            PlayerSetup(player[i],number);
         }
 
     }
 
 
 
-    public void PlayerSetup(Player player, int playeramout){
+    public void PlayerSetup(Player player, int pl){
 
        if (gui_player==null){
-           gui_player = new GUI_Player[playeramout];
+           gui_player = new GUI_Player[pl];
        }
 
 
