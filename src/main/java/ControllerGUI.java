@@ -29,9 +29,10 @@ public class ControllerGUI {
 
 
     public void PlayerStart(){
-        int number = Integer.parseInt(RequestPlayerAmount());
+        int number = Integer.parseInt(gui.getUserSelection("Hvor manage spiller skal der være","2","3","4","5","6"));
 
         player= new Player[number];
+
 
 
         for (int i = 0; i < number ; i++){
@@ -104,12 +105,6 @@ public class ControllerGUI {
 
 
 
-
-
-    public String RequestPlayerAmount(){
-
-        return gui.getUserSelection("Hvor manage spiller skal der være","2","3","4","5","6");
-    }
 
 
 

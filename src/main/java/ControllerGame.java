@@ -1,3 +1,5 @@
+import chancePackage.ChanceCard;
+import chancePackage.chanceController;
 import fieldsPackage.ModelFields;
 import fieldsPackage.Skat;
 import fieldsPackage.Street;
@@ -9,21 +11,30 @@ import java.awt.*;
 public class ControllerGame {
 
 
-    ControllerGUI controllerGUI = new ControllerGUI();
-    public Player player;
+    private ControllerGUI controllerGUI = new ControllerGUI();
+    private Player player;
+    private ChanceCard[] chanceCards;
+    private fields field = new fields();
+    private Dice dice = new Dice();
 
-    public Dice dice = new Dice();
-    private boolean win=false;
+
 
     ControllerGame(){
-        this.chanceCards = initializeCards();
+        chanceController chanceCard =new chanceController();
+        this.chanceCards = chanceCard.initializeCards();
         Start();
     }
-
+    public void increaseBalanceBy(int amount) {
+        int currentBalance = this.controllerGUI.gui_player[player.getPlayerNumber()].getBalance();
+        this.controllerGUI.gui_player[player.getPlayerNumber()].setBalance(currentBalance + amount);
+    }
+    public void decreacbalanceBy(int amount) {
+        int currentBalance = this.controllerGUI.gui_player[player.getPlayerNumber()].getBalance();
+        this.controllerGUI.gui_player[player.getPlayerNumber()].setBalance(currentBalance - amount);
+    }
     public void Start(){
 
-
-        while (!win){
+        while (true){
             Roll();
             MoveCar();
             Game();
@@ -40,6 +51,9 @@ public class ControllerGame {
 
     }
 
+    public void hideOldPosition(){
+        controllerGUI.gui.getFields()[player.getPlayerPosition()].setCar(controllerGUI.gui_player[player.getPlayerNumber()],false);
+    }
 
 
 
@@ -55,21 +69,21 @@ public class ControllerGame {
 
         controllerGUI.gui.showMessage(" Do you  want to rolle the dice?");
         int Rolle1= dice.RolleDice();
-        int Rolle2 = dice.RolleDice();
-        sum= 7;//Rolle1+Rolle2;
+        int Rolle2 =  dice.RolleDice();
+        sum= Rolle1+Rolle2;
         player.setPlayerNewPo(sum);
 
         controllerGUI.gui.setDice(Rolle1,Rolle2);
     }
 
-    int CurrentPosition;
-    int PlayerNewPosition;
+
+
 
     public void MoveCar(){
 
-        CurrentPosition= player.getPlayerPosition();
+        int CurrentPosition= player.getPlayerPosition();
 
-        PlayerNewPosition =  (player.getPlayerPosition() + player.getPlayerNewPo()) % controllerGUI.gui.getFields().length;
+        int PlayerNewPosition =  (player.getPlayerPosition() + player.getPlayerNewPo()) % controllerGUI.gui.getFields().length;
 
         try {
                 controllerGUI.gui.getFields()[CurrentPosition].setCar(controllerGUI.gui_player[player.getPlayerNumber()],false);
@@ -83,10 +97,9 @@ public class ControllerGame {
     }
 
 
-    fields field = new fields();
+
 
    public void Game(){
-
 
        ModelFields Selection = field.felter[player.getPlayerPosition()];
        String user =String.valueOf(Selection);
@@ -95,13 +108,10 @@ public class ControllerGame {
        if ( user.equals("street")){
 
           String getUserSelection= controllerGUI.gui.getUserSelection("vil du køb denne felt?","Ja","Nej");
+           GUI_Ownable ownable = (GUI_Ownable) controllerGUI.gui.getFields()[player.getPlayerPosition()];
 
           if (getUserSelection.equals("Ja")){
 
-
-
-
-              GUI_Ownable ownable = (GUI_Ownable) controllerGUI.gui.getFields()[player.getPlayerPosition()];
               ownable.setBorder(Color.red,Color.BLACK);
               ownable.setOwnerName(player.getName());
 
@@ -118,88 +128,71 @@ public class ControllerGame {
        }
 
        if (user.equals("Skat")){
-
-           int newbalance = player.getBalance() -  ((Skat)field.felter[player.getPlayerPosition()]).getPrice();
-
-           player.setBalance(newbalance);
-
-
-
+           decreacbalanceBy(((Skat)field.felter[player.getPlayerPosition()]).getPrice());
        }
        if (user.equals("Chance")){
-
-
-           controllerGUI.gui.showMessage("Chance");
-          /* Random random = new Random();
-           random.nextInt();
-           player.setPlayerNewPo(2);
-           MoveCar();
-*/
-           handleTakeChanceCardSquare(player);
-
-
-
+           handleTakeChanceCardSquare();
+       }
+       if (user.equals("parkering")){
+           controllerGUI.gui.showMessage("Du har fri parkering plads");
        }
    }
 
-
-    private ChanceCard[] chanceCards;
-    private int chanceCount = 7;
-
-    private ChanceCard[] initializeCards() {
-        ChanceCard[] chanceCards = new ChanceCard[chanceCount];
-        ChanceCard chance1 = new ChanceCard("Ryk frem til START. Modtag 2M","Start",2,0);
-        ChanceCard chance2 = new ChanceCard("Ryk 5 felter frem","Move",0,5);
-        ChanceCard chance3 = new ChanceCard("Ryk 1 felt frem eller tag et chancekort mere","Move",0,1);
-        ChanceCard chance4 = new ChanceCard("Du har spist for meget slik. Betal 2M til banken","Pay",2,0);
-        ChanceCard chance5 = new ChanceCard("Du løslades uden omkostninger. Behold dette kort indtil du får brugt det","Prison",0,0);
-        ChanceCard chance6 = new ChanceCard("Det er din fødselsdag! Alle giver dig 1M. TILLYKKE MED FØDSELSDAGEN!","PayByOthers",1,0);
-        ChanceCard chance7 = new ChanceCard("Du har lavet alle dine lektier! Modtag 2M fra banken.","PayByBank",2,0);
-
-        //int index = 0;
-        chanceCards[0] = chance1;
-        chanceCards[1] = chance2;
-        chanceCards[2] = chance3;
-        chanceCards[3] = chance4;
-        chanceCards[4] = chance5;
-        chanceCards[5] = chance6;
-        chanceCards[6] = chance7;
-        return chanceCards;
-    }
-
-    private void handleTakeChanceCardSquare(Player currentPlayer) {
+    private void handleTakeChanceCardSquare() {
         controllerGUI.gui.showMessage("Du er landet på prøv lykken! Tag et chance kort");
         ChanceCard chanceCard = chanceCards[1].getRandomChanceCard(chanceCards);
+
         String text = chanceCard.getText();
         controllerGUI.gui.displayChanceCard(text);
         String action = chanceCard.getActionType();
         switch (action) {
             case "Start":
-                //currentPlayer.increaseBalanceBy(2);
-                //currentPlayer.setCurrentSquareIndex(gui,0);
+                increaseBalanceBy(chanceCard.getValue());
+                hideOldPosition();
+                player.setPlayerPosition(0);
+                player.setPlayerNewPo(0);
+                MoveCar();
+
                 break;
             case "Move":
-               // int currentIndex = currentPlayer.getCurrentSquareIndex();
-                if (text.equals("Ryk 5 felter frem")) {
-                   // movePlayer(currentPlayer,5);
-                   // Square boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
-                    //evaluateSquare(boardSquare,currentPlayer);
-                }
-                else {
-                    boolean choice = controllerGUI.gui.getUserLeftButtonPressed("Vil du rykke et felt frem eller tage et nyt chancekort?", "Ryk 1 Felt Frem", "Tag nyt chancekort");
-                    if (choice) {
-                       // movePlayer(currentPlayer,1);
-                       // Square boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
-                       // evaluateSquare(boardSquare,currentPlayer);
-                    }
-                    else {
-                        handleTakeChanceCardSquare(currentPlayer);
-                    }
-                }
+                player.setPlayerNewPo(chanceCard.getMove());
+                MoveCar();
+
+                break;
+
+            case "Rådhuspladsen":
+                hideOldPosition();
+                player.setPlayerPosition(0);
+                player.setPlayerNewPo(chanceCard.getMove());
+                MoveCar();
                 break;
             case "Pay":
-               // currentPlayer.decreaseBalanceBy(2);
+                decreacbalanceBy(chanceCard.getValue());
                 break;
+            case "GetPaid":
+                increaseBalanceBy(chanceCard.getValue());
+                break;
+            case "CrossingStart":
+
+                if (player.getPlayerPosition()> chanceCard.getMove()){
+
+                    increaseBalanceBy(chanceCard.getValue());
+                    hideOldPosition();
+                    player.setPlayerPosition(0);
+                    player.setPlayerNewPo(chanceCard.getMove());
+                    MoveCar();
+
+                }else if (player.getPlayerPosition()<chanceCard.getMove()){
+
+                    hideOldPosition();
+                    player.setPlayerPosition(0);
+                    player.setPlayerNewPo(chanceCard.getMove());
+                    MoveCar();
+
+                }
+
+                break;
+
             case "Prison":
                 /*if (currentPlayer.hasJailFreeCard()) {
                     return;
@@ -208,19 +201,26 @@ public class ControllerGame {
                     currentPlayer.setGetOutOfJailCard();
                 }*/
                 break;
-            case "PayByOthers":
-                /*for(int i=0;i<players.length;i++) {
-                    if (!players[i].getName().equals(currentPlayer.getName())) {
-                        players[i].decreaseBalanceBy(1);
+            case "GetPaidbyOthers":
+
+                for(int i=0;i<controllerGUI.player.length;i++) {
+
+                    if (!controllerGUI.player[i].getName().equals(player.getName())) {
+
+                        int currentBalance = this.controllerGUI.gui_player[i].getBalance();
+                        controllerGUI.gui_player[i].setBalance(currentBalance - chanceCard.getValue());
+
+                        increaseBalanceBy(chanceCard.getValue());
+
                     }
-                    currentPlayer.increaseBalanceBy(1);
-                }*/
+
+                }
+
                 break;
-            case "PayByBank":
-               // currentPlayer.increaseBalanceBy(2);
-                break;
+
         }
     }
+
 
 
 
