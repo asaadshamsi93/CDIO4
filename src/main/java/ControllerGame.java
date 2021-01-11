@@ -1,3 +1,8 @@
+import fieldsPackage.ModelFields;
+import fieldsPackage.Street;
+import fieldsPackage.fields;
+import gui_fields.GUI_Ownable;
+
 public class ControllerGame {
 
 
@@ -17,6 +22,7 @@ public class ControllerGame {
         while (!win){
             Roll();
             MoveCar();
+            Game();
 
         }
     }
@@ -26,6 +32,8 @@ public class ControllerGame {
         PlayerStart %= controllerGUI.player.length;
         controllerGUI.player[PlayerStart].setPlayerTurn(true);
         return controllerGUI.player[PlayerStart];
+
+
     }
 
 
@@ -62,14 +70,34 @@ public class ControllerGame {
         }
 
         player.setPlayerPosition(PlayerNewPosition);
+    }
 
 
+    fields field = new fields();
+   public void Game(){
 
 
+       ModelFields f = field.felter[player.getPlayerPosition()];
+       System.out.println(f);
+
+       if (f.equals("Street")){
+
+          String getUserSelection= controllerGUI.gui.getUserSelection("vil du køb denne felt?","Ja","Nej");
+
+          if (getUserSelection.equals("Ja")){
+
+              GUI_Ownable ownable =  GUI_Ownable(controllerGUI.gui.getFields()) {
+              }
+          }
+           if (getUserSelection.equals("Nej")){
+               return;
+
+           }
+       }
+       if (f.equals("Skat")){
 
 
-
-
+       }
 
     }
 
