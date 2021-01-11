@@ -13,6 +13,10 @@ public class Street extends ModelFields {
         this.rent = rent;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     int price;
     private int rent;
 
