@@ -4,11 +4,10 @@ public class ModelFields {
 
 
     private String Name;
-    private int Price;
 
-    public ModelFields(String name, int price) {
+
+    public ModelFields(String name) {
         Name = name;
-        Price = price;
     }
 
 

@@ -77,24 +77,29 @@ public class ControllerGame {
    public void Game(){
 
 
-       ModelFields f = field.felter[player.getPlayerPosition()];
-       System.out.println(f);
+       ModelFields Selection = field.felter[player.getPlayerPosition()];
+       String user =String.valueOf(Selection);
+       System.out.println(user);
 
-       if (f.equals("Street")){
+       if ( user.equals("street")){
 
           String getUserSelection= controllerGUI.gui.getUserSelection("vil du køb denne felt?","Ja","Nej");
 
           if (getUserSelection.equals("Ja")){
 
-              GUI_Ownable ownable =  GUI_Ownable(controllerGUI.gui.getFields()) {
-              }
+              ((Street)field.felter[player.getPlayerPosition()]).getRent();
+
+              System.out.println( ((Street)field.felter[player.getPlayerPosition()]).getRent());
+
+             // GUI_Ownable ownable =  GUI_Ownable(controllerGUI.gui.getFields())
           }
            if (getUserSelection.equals("Nej")){
                return;
 
            }
        }
-       if (f.equals("Skat")){
+
+       if (user.equals("Skat")){
 
 
        }

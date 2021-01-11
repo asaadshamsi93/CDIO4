@@ -7,7 +7,7 @@ public class Chance extends ModelFields {
         return "Chance";
     }
 
-    public Chance(String name, int price) {
-        super(name, price);
+    public Chance(String name) {
+        super(name);
     }
 }
