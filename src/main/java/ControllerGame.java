@@ -1,4 +1,3 @@
-import chancePackage.ChanceCard;
 import fieldsPackage.ModelFields;
 import fieldsPackage.Skat;
 import fieldsPackage.Street;
@@ -6,7 +5,6 @@ import fieldsPackage.fields;
 import gui_fields.GUI_Ownable;
 
 import java.awt.*;
-import java.util.Random;
 
 public class ControllerGame {
 
@@ -18,6 +16,7 @@ public class ControllerGame {
     private boolean win=false;
 
     ControllerGame(){
+        this.chanceCards = initializeCards();
         Start();
     }
 
@@ -136,33 +135,92 @@ public class ControllerGame {
            player.setPlayerNewPo(2);
            MoveCar();
 */
+           handleTakeChanceCardSquare(player);
 
 
-
-           //ChanceCard chanceCard = chanceCards[1].getRandomChanceCard(chanceCards);
-           //System.out.println(chanceCard);
-           initializeCards();
 
        }
    }
 
 
     private ChanceCard[] chanceCards;
+    private int chanceCount = 7;
 
-   private ChanceCard[] initializeCards() {
-        chanceCards = new ChanceCard[7];
+    private ChanceCard[] initializeCards() {
+        ChanceCard[] chanceCards = new ChanceCard[chanceCount];
+        ChanceCard chance1 = new ChanceCard("Ryk frem til START. Modtag 2M","Start",2,0);
+        ChanceCard chance2 = new ChanceCard("Ryk 5 felter frem","Move",0,5);
+        ChanceCard chance3 = new ChanceCard("Ryk 1 felt frem eller tag et chancekort mere","Move",0,1);
+        ChanceCard chance4 = new ChanceCard("Du har spist for meget slik. Betal 2M til banken","Pay",2,0);
+        ChanceCard chance5 = new ChanceCard("Du løslades uden omkostninger. Behold dette kort indtil du får brugt det","Prison",0,0);
+        ChanceCard chance6 = new ChanceCard("Det er din fødselsdag! Alle giver dig 1M. TILLYKKE MED FØDSELSDAGEN!","PayByOthers",1,0);
+        ChanceCard chance7 = new ChanceCard("Du har lavet alle dine lektier! Modtag 2M fra banken.","PayByBank",2,0);
 
-       chanceCards[0] = new ChanceCard("Ryk frem til START. Modtag 2M","Start",2,0);
-       chanceCards[1]  = new ChanceCard("Ryk 5 felter frem","Move",0,5);
-       chanceCards[2]  = new ChanceCard("Ryk 1 felt frem eller tag et chancekort mere","Move",0,1);
-       chanceCards[3]  = new ChanceCard("Du har spist for meget slik. Betal 2M til banken","Pay",2,0);
-       chanceCards[4]  = new ChanceCard("Du løslades uden omkostninger. Behold dette kort indtil du får brugt det","Prison",0,0);
-       chanceCards[5]  = new ChanceCard("Det er din fødselsdag! Alle giver dig 1M. TILLYKKE MED FØDSELSDAGEN!","PayByOthers",1,0);
-       chanceCards[6]  = new ChanceCard("Du har lavet alle dine lektier! Modtag 2M fra banken.","PayByBank",2,0);
-
-
+        //int index = 0;
+        chanceCards[0] = chance1;
+        chanceCards[1] = chance2;
+        chanceCards[2] = chance3;
+        chanceCards[3] = chance4;
+        chanceCards[4] = chance5;
+        chanceCards[5] = chance6;
+        chanceCards[6] = chance7;
         return chanceCards;
-   }
+    }
+
+    private void handleTakeChanceCardSquare(Player currentPlayer) {
+        controllerGUI.gui.showMessage("Du er landet på prøv lykken! Tag et chance kort");
+        ChanceCard chanceCard = chanceCards[1].getRandomChanceCard(chanceCards);
+        String text = chanceCard.getText();
+        controllerGUI.gui.displayChanceCard(text);
+        String action = chanceCard.getActionType();
+        switch (action) {
+            case "Start":
+                //currentPlayer.increaseBalanceBy(2);
+                //currentPlayer.setCurrentSquareIndex(gui,0);
+                break;
+            case "Move":
+               // int currentIndex = currentPlayer.getCurrentSquareIndex();
+                if (text.equals("Ryk 5 felter frem")) {
+                   // movePlayer(currentPlayer,5);
+                   // Square boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+                    //evaluateSquare(boardSquare,currentPlayer);
+                }
+                else {
+                    boolean choice = controllerGUI.gui.getUserLeftButtonPressed("Vil du rykke et felt frem eller tage et nyt chancekort?", "Ryk 1 Felt Frem", "Tag nyt chancekort");
+                    if (choice) {
+                       // movePlayer(currentPlayer,1);
+                       // Square boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+                       // evaluateSquare(boardSquare,currentPlayer);
+                    }
+                    else {
+                        handleTakeChanceCardSquare(currentPlayer);
+                    }
+                }
+                break;
+            case "Pay":
+               // currentPlayer.decreaseBalanceBy(2);
+                break;
+            case "Prison":
+                /*if (currentPlayer.hasJailFreeCard()) {
+                    return;
+                }*/
+                /*else {
+                    currentPlayer.setGetOutOfJailCard();
+                }*/
+                break;
+            case "PayByOthers":
+                /*for(int i=0;i<players.length;i++) {
+                    if (!players[i].getName().equals(currentPlayer.getName())) {
+                        players[i].decreaseBalanceBy(1);
+                    }
+                    currentPlayer.increaseBalanceBy(1);
+                }*/
+                break;
+            case "PayByBank":
+               // currentPlayer.increaseBalanceBy(2);
+                break;
+        }
+    }
 
 
 

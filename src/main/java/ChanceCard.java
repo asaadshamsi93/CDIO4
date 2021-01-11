@@ -1,5 +1,3 @@
-package chancePackage;
-
 import java.util.Random;
 
 public class ChanceCard {
@@ -33,7 +31,8 @@ public class ChanceCard {
     }
 
     public ChanceCard getRandomChanceCard(ChanceCard[] chanceCards) {
-        int idx = new Random().nextInt(chanceCount);
+        int idx = new Random().nextInt(chanceCount)+1;
         return chanceCards[idx];
     }
+
 }
