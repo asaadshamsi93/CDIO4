@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class chanceController {
     private ChanceCard[] chanceCards;
-
     public ChanceCard[] initializeCards() {
 
         chanceCards = new ChanceCard[36];
